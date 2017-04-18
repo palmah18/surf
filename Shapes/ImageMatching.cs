@@ -32,10 +32,10 @@ namespace Shapes
         {
            /* string path = @"C:\Users\Palmah\Desktop\vägskyltar\";
             string[] dbImages = { path + "10kmh.jpg", path + "10kmh.jpg", path + "10kmh.jpg" }; */
-            string queryImage = "query.jpg";
+            string queryImage = @"C:\Users\Palmah\Desktop\Magdalena\Photos\15071856.jpg";
             string[] dbImages = { @"C:\Users\Palmah\Desktop\vägskyltar\10kmh.jpg", @"C:\Users\Palmah\Desktop\vägskyltar\20kmh.jpg", @"C:\Users\Palmah\Desktop\vägskyltar\30kmh.jpg" };
 
-
+            Console.WriteLine(1);
             IList<IndecesMapping> imap;
 
             // compute descriptors for each image
@@ -48,7 +48,7 @@ namespace Shapes
             Matrix<float> queryDescriptors = ComputeSingleDescriptors(queryImage);
 
             FindMatches(dbDescs, queryDescriptors, ref imap);
-
+            
             return imap;
         }
 
@@ -106,11 +106,13 @@ namespace Shapes
         {
             var indices = new Matrix<int>(queryDescriptors.Rows, 2); // matrix that will contain indices of the 2-nearest neighbors found
             var dists = new Matrix<float>(queryDescriptors.Rows, 2); // matrix that will contain distances to the 2-nearest neighbors found
-
+            Console.WriteLine(2);
             // create FLANN index with 4 kd-trees and perform KNN search over it look for 2 nearest neighbours
-            var flannIndex = new Index(dbDescriptors, 4);
+            //var indexParams = new LshIndexParams(10, 10, 0);
+            KdTreeIndexParams indexParams = new KdTreeIndexParams(4);
+            var flannIndex = new Index(dbDescriptors, indexParams);
             flannIndex.KnnSearch(queryDescriptors, indices, dists, 2, 24);
-
+            Console.WriteLine(3);
             for (int i = 0; i < indices.Rows; i++)
             {
                 // filter out all inadequate pairs based on distance between pairs

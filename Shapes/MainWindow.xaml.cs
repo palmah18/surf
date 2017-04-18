@@ -99,7 +99,7 @@ namespace Shapes
 
             {
                 //load image into window
-                Image<Bgr, byte> originalImage = new Image<Bgr, byte>(openPic.FileName);
+                /*Image<Bgr, byte> originalImage = new Image<Bgr, byte>(openPic.FileName);
                 Image<Bgr, byte> croppedImage = detectCircle(originalImage);
                 detectRectangle.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(croppedImage);
                 HoornTimer timer = HoornTimer.Instance;
@@ -114,18 +114,27 @@ namespace Shapes
                 myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayImage);
                 // myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayImage);
 
-                long matchTime;
-                 VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch();
-                 Mat img = new Mat();
-                 Mat originalMat = new Mat();
-                 Mat result = new Mat();
-                 originalMat = grayImage.Mat;
-                 img = grayCompareImage.Mat;
-                 result = DrawMatches.Draw(originalMat, img, out matchTime);
-                              
-                 myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(result);
+                  long matchTime;
+                   VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch();
+                   Mat img = new Mat();
+                   Mat originalMat = new Mat();
+                   Mat result = new Mat();
+                   originalMat = grayImage.Mat;
+                   img = grayCompareImage.Mat;
+                   result = DrawMatches.Draw(originalMat, img, out matchTime);
 
-                
+                   myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(result); */
+
+                ImageMatching matches = new ImageMatching();
+                IList<ImageMatching.IndecesMapping> imap;
+                imap = matches.Match();
+
+                foreach (var img in imap)
+                {
+                    Console.WriteLine("Name: " + img.fileName + "Similarities: " + img.Similarity);
+                }
+
+                              
             }
 
         }
