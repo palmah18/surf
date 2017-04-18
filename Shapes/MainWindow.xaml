@@ -1,0 +1,25 @@
+﻿<Window x:Class="Shapes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shapes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="myImage" Margin="5" />
+        <Image Grid.Column="1" x:Name="myGreyImage" Margin="5"/>
+        <Image Grid.Row="1" x:Name="detectCircles" Margin="5"/>
+        <Image Grid.Row="1" Grid.Column="1" x:Name="detectRectangle" Margin="5"/>
+        <Button Grid.Column="1" Grid.Row="2" x:Name="testButton" Content="Load Image" Click="testButton_Click" Height="20" VerticalAlignment="Top" Margin="167,0,0,0"/>
+    </Grid>
+</Window>
