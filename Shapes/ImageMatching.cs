@@ -28,14 +28,23 @@ namespace Shapes
             public string fileName { get; set; }
         }
 
-        public IList<IndecesMapping> Match()
+        public IList<IndecesMapping> Match(Image<Gray, byte> queryImage)
         {
-           /* string path = @"C:\Users\Palmah\Desktop\vägskyltar\";
-            string[] dbImages = { path + "10kmh.jpg", path + "10kmh.jpg", path + "10kmh.jpg" }; */
-            string queryImage = @"C:\Users\Palmah\Desktop\Magdalena\Photos\15071856.jpg";
-            string[] dbImages = { @"C:\Users\Palmah\Desktop\vägskyltar\10kmh.jpg", @"C:\Users\Palmah\Desktop\vägskyltar\20kmh.jpg", @"C:\Users\Palmah\Desktop\vägskyltar\30kmh.jpg" };
+             string path = @"C:\Users\Hoorn\Desktop\Shapes\Roadsigns\";
+            // string[] dbImages = { path + "10kmh.jpg", path + "10kmh.jpg", path + "10kmh.jpg" }; 
+             //string queryImage = @"C:\Users\Hoorn\Desktop\Shapes\Roadsigns\30kmh.jpg";
+             string[] dbImages = {
+                 path + "10kmh.jpg",
+                 path + "20kmh.jpg",
+                 path + "30kmh.jpg",
+                 path + "40kmh.jpg",
+                 path + "50kmh.jpg",
+                 path + "70kmh.jpg",
+                 path + "80kmh.jpg",
+                 path + "90kmh.jpg",
 
-            Console.WriteLine(1);
+            };
+
             IList<IndecesMapping> imap;
 
             // compute descriptors for each image
@@ -45,7 +54,7 @@ namespace Shapes
             Matrix<float> dbDescs = ConcatDescriptors(dbDescsList);
 
             // compute descriptors for the query image
-            Matrix<float> queryDescriptors = ComputeSingleDescriptors(queryImage);
+            Matrix<float> queryDescriptors = ComputeSingleDescriptors2(queryImage);
 
             FindMatches(dbDescs, queryDescriptors, ref imap);
             
@@ -69,6 +78,26 @@ namespace Shapes
                 VectorOfKeyPoint keyPoints = new VectorOfKeyPoint();
                 detector.DetectAndCompute(img, null, keyPoints, descsTmp, false);
             }
+
+            Matrix<float> descs = new Matrix<float>(descsTmp.Rows, descsTmp.Cols);
+            descsTmp.CopyTo(descs);
+
+            return descs;
+        }
+
+        public Matrix<float> ComputeSingleDescriptors2(Image<Gray, byte> grayImage) // old return Matrix<float>
+        {
+            Mat descsTmp = new Mat();
+
+
+                #region depreciated
+                //VectorOfKeyPoint keyPoints = detector.DetectKeyPointsRaw(img, null);
+                //descs = detector.ComputeDescriptorsRaw(img, null, keyPoints);
+                #endregion
+
+                VectorOfKeyPoint keyPoints = new VectorOfKeyPoint();
+                detector.DetectAndCompute(grayImage, null, keyPoints, descsTmp, false);
+
 
             Matrix<float> descs = new Matrix<float>(descsTmp.Rows, descsTmp.Cols);
             descsTmp.CopyTo(descs);
@@ -106,13 +135,14 @@ namespace Shapes
         {
             var indices = new Matrix<int>(queryDescriptors.Rows, 2); // matrix that will contain indices of the 2-nearest neighbors found
             var dists = new Matrix<float>(queryDescriptors.Rows, 2); // matrix that will contain distances to the 2-nearest neighbors found
-            Console.WriteLine(2);
+            Console.WriteLine(indices.Data[2,1]);
+            Console.WriteLine(dists);
             // create FLANN index with 4 kd-trees and perform KNN search over it look for 2 nearest neighbours
             //var indexParams = new LshIndexParams(10, 10, 0);
             KdTreeIndexParams indexParams = new KdTreeIndexParams(4);
             var flannIndex = new Index(dbDescriptors, indexParams);
             flannIndex.KnnSearch(queryDescriptors, indices, dists, 2, 24);
-            Console.WriteLine(3);
+
             for (int i = 0; i < indices.Rows; i++)
             {
                 // filter out all inadequate pairs based on distance between pairs
@@ -122,7 +152,7 @@ namespace Shapes
                     // in the actual implementation this should be done differently as it's not very efficient for large image collections.
                     foreach (var img in imap)
                     {
-                        if (img.IndexStart <= i && img.IndexEnd >= i)
+                        if (img.IndexStart <= indices[i,0] && img.IndexEnd >= indices[i,0])
                         {
                             img.Similarity++;
                             break;

@@ -99,22 +99,20 @@ namespace Shapes
 
             {
                 //load image into window
-                /*Image<Bgr, byte> originalImage = new Image<Bgr, byte>(openPic.FileName);
+                Image<Bgr, byte> originalImage = new Image<Bgr, byte>(openPic.FileName);
                 Image<Bgr, byte> croppedImage = detectCircle(originalImage);
                 detectRectangle.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(croppedImage);
-                HoornTimer timer = HoornTimer.Instance;
-                timer.Start();
+
                  myImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(originalImage);
-                 Image<Bgr, byte> compareImage = new Image<Bgr, byte>(@"C:\Users\Palmah\Desktop\exjobb\30skylt.jpg");
-                 Image<Gray, byte> grayCompareImage = compareImage.Convert<Gray, byte>();
-                timer.Stop();
-                timer.calculateDiff("ToBitmapSource");
+                 //Image<Bgr, byte> compareImage = new Image<Bgr, byte>(@"C:\Users\Palmah\Desktop\exjobb\30skylt.jpg");
+                 //Image<Gray, byte> grayCompareImage = compareImage.Convert<Gray, byte>();
+
                  //change image to gray scale
                  Image<Gray, byte> grayImage = croppedImage.Convert<Gray, byte>();
                 myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayImage);
-                // myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayImage);
+                 myGreyImage.Source = Emgu.CV.WPF.BitmapSourceConvert.ToBitmapSource(grayImage);
 
-                  long matchTime;
+                  /*long matchTime;
                    VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch();
                    Mat img = new Mat();
                    Mat originalMat = new Mat();
@@ -127,8 +125,8 @@ namespace Shapes
 
                 ImageMatching matches = new ImageMatching();
                 IList<ImageMatching.IndecesMapping> imap;
-                imap = matches.Match();
-
+                imap = matches.Match(grayImage);
+            
                 foreach (var img in imap)
                 {
                     Console.WriteLine("Name: " + img.fileName + "Similarities: " + img.Similarity);
